@@ -4,17 +4,17 @@ module.exports = {
   // Get all Users
   async getUsers(req, res) {
     try {
-      const users = await User.find().populate('thoughts');
+      const users = await User.find();
       res.json(users);
     } catch (err) {
       res.status(500).json(err);
+      console.log(err);
     }
   },
   // Get a User using their ID
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId })
-        .populate('thoughts');
+      const user = await User.findOne({ _id: req.params.userId});
 
       if (!user) {
         return res.status(404).json({ message: 'No User with that ID' });
@@ -35,13 +35,13 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Delete a course
+  // Delete a user
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndDelete({ _id: req.params.userId });
 
       if (!user) {
-        res.status(404).json({ message: 'No user with that ID' });
+        res.status(404).json({ message: 'No user with that id' });
       }
 
       await Thought.deleteMany({ _id: { $in: user.thoughts } });
